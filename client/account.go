@@ -3,7 +3,10 @@ package client
 import (
 	"awsdisc/apps"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"sync"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -17,12 +20,55 @@ import (
 var awscfg aws.Config
 var onceAwsCfg sync.Once
 
+type CicdCreds struct {
+	AccessKeyId     string `json:"AccessKeyId"`
+	SecretAccessKey string `json:"SecretAccessKey"`
+	SessionToken    string `json:"SessionToken,omitempty"`
+	Expiration      string `json:"Expiration,omitempty"`
+	RoleArn         string `json:"RoleArn,omitempty"`
+}
+
 func AwsConfig() *aws.Config {
 	onceAwsCfg.Do(func() {
-		awscfg = TestStsAssumeRoleConfig()
+		awscfg = StsAssumeRoleConfigFromFile()
 	})
-	apps.Logs.Error(fmt.Sprintf("awscfg is created: %p", &awscfg))
+
 	return &awscfg
+}
+
+/*
+/tmp/awsuser.json:
+{
+	"AccessKeyId": "access_key_id",
+	"SecretAccessKey": "secret_access_key",
+	"SessionToken": "session_token",
+	"Expiration": "expiration",
+	"RoleArn": "role_arn"
+}
+*/
+func ReadCredentialsFromFile(path string) (CicdCreds, error) {
+	if path == "" {
+		path = `/tmp/awsuser.json`
+	}
+
+	f, err := os.Open(`/tmp/awsuser.json`)
+	if err != nil {
+		apps.Logs.Error("can't read credential file")
+		return CicdCreds{}, err
+	}
+	defer f.Close()
+
+	fmt.Println("Successfully Opened users.json")
+	j, _ := ioutil.ReadAll(f)
+
+	cred := CicdCreds{}
+	err = json.Unmarshal(j, &cred)
+	if err != nil {
+		apps.Logs.Error("failed to unmarshal json: ", err.Error())
+		return CicdCreds{}, err
+	}
+
+	return cred, nil
 }
 
 func DefaultConfig() (aws.Config, error) {
@@ -98,10 +144,16 @@ func StsAssumeRoleConfig(akId string, secKey string, roleArn string) (aws.Config
 }
 
 /*
-	Example of Usage
+	auth for testing
 */
-func TestStsAssumeRoleConfig() aws.Config {
-	cfg, err := StsAssumeRoleConfig("", "", ``)
+func StsAssumeRoleConfigFromFile() aws.Config {
+	c, err := ReadCredentialsFromFile("")
+	if err != nil {
+		apps.Logs.Error("failed to get credentials from file: ", err.Error())
+		return aws.Config{}
+	}
+
+	cfg, err := StsAssumeRoleConfig(c.AccessKeyId, c.SecretAccessKey, c.RoleArn)
 	if err != nil {
 		apps.Logs.Error("StsAssumeRoleConfig error: ", err.Error())
 		return aws.Config{}
