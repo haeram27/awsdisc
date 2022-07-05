@@ -129,7 +129,7 @@ func AssumeRoleCustomMFAConfig(stsUserCfg *aws.Config, roleArn string, mfaSerial
 /*
 	akId : user's Access Key ID
 	secKey : user's Secret Access Key
-	roleArn :
+	roleArn : arn of role
 */
 func StsAssumeRoleConfig(akId string, secKey string, roleArn string) (aws.Config, error) {
 	cfg, err := StaticCredentialConfig(akId, secKey, "")
