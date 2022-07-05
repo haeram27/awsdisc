@@ -2,7 +2,6 @@ package client
 
 import (
 	"awsdisc/apps"
-	"awsdisc/client/util"
 	"context"
 	"encoding/json"
 	"errors"
@@ -47,7 +46,7 @@ func EKSDescribeClusterCmd(cfg *aws.Config, name string) (j []byte, err error) {
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -89,7 +88,7 @@ func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName 
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -159,7 +158,7 @@ func EKSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -200,7 +199,7 @@ func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (j []byte, err error) {
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }

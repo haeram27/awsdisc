@@ -2,7 +2,6 @@ package client
 
 import (
 	"awsdisc/apps"
-	"awsdisc/client/util"
 	"context"
 	"encoding/json"
 	"errors"
@@ -40,7 +39,7 @@ func EC2DescribeInstancesCmd(cfg *aws.Config) (j []byte, err error) {
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }

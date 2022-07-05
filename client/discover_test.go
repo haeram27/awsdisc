@@ -5,5 +5,9 @@ import (
 )
 
 func TestDiscoverAll(t *testing.T) {
-	DiscoverAll()
+	j, err := DiscoverAll()
+	if err != nil {
+		t.Errorf("DiscoverAll() failed ")
+	}
+	t.Log(PrettyJson(j).String())
 }

@@ -2,11 +2,10 @@ package client
 
 import (
 	"awsdisc/apps"
-	"awsdisc/client/util"
 	"encoding/json"
 )
 
-func DiscoverAll() {
+func DiscoverAll() ([]byte, error) {
 	// EC2
 	ec2, err := EC2DescribeInstancesCmd(AwsConfig())
 	if err != nil {
@@ -34,21 +33,21 @@ func DiscoverAll() {
 
 	// consolidate
 	data := make(map[string]interface{})
-	var result interface{}
-	json.Unmarshal(ec2, &result)
-	data["EC2"] = result
-	json.Unmarshal(ecr, &result)
-	data["ECRRepositories"] = result
-	json.Unmarshal(ecs, &result)
-	data["ECSClusters"] = result
-	json.Unmarshal(eks, &result)
-	data["EKSClusters"] = result
+	var inner interface{}
+	json.Unmarshal(ec2, &inner)
+	data["EC2"] = inner
+	json.Unmarshal(ecr, &inner)
+	data["ECRRepositories"] = inner
+	json.Unmarshal(ecs, &inner)
+	data["ECSClusters"] = inner
+	json.Unmarshal(eks, &inner)
+	data["EKSClusters"] = inner
 
-	jsonData, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
-		apps.Logs.Error("could not marshal json: %s\n", err)
-		return
+		apps.Logs.Error("could not marshal json: ", err)
+		return []byte{}, err
 	}
 
-	util.PrintPrettyJson(jsonData)
+	return result, nil
 }

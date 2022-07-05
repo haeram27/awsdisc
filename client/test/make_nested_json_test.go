@@ -1,7 +1,7 @@
 package test
 
 import (
-	"awsdisc/client/util"
+	"awsdisc/client"
 	"encoding/json"
 	"fmt"
 	"testing"
@@ -26,5 +26,5 @@ func TestMakeNestedJson(t *testing.T) {
 	}
 
 	fmt.Println(string(jsonData))
-	util.PrintPrettyJson(jsonData)
+	client.PrintPrettyJson(jsonData)
 }

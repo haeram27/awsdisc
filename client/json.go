@@ -1,4 +1,4 @@
-package util
+package client
 
 import (
 	"awsdisc/apps"
@@ -15,4 +15,10 @@ func PrintPrettyJson(rawJson []byte) {
 	} else {
 		apps.Logs.Debug(prettyJSON.String())
 	}
+}
+
+func PrettyJson(rawJson []byte) *bytes.Buffer {
+	var prettyJSON bytes.Buffer
+	json.Indent(&prettyJSON, rawJson, "", "  ")
+	return &prettyJSON
 }

@@ -2,7 +2,6 @@ package client
 
 import (
 	"awsdisc/apps"
-	"awsdisc/client/util"
 	"context"
 	"encoding/json"
 	"errors"
@@ -47,7 +46,7 @@ func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (j []byte, err error
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -88,7 +87,7 @@ func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (j []byte, err e
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -122,7 +121,7 @@ func ECSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -163,7 +162,7 @@ func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (j []byte, err e
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -197,7 +196,7 @@ func ECSListTaskDefinitionsCmd(cfg *aws.Config) (j []byte, err error) {
 	}
 
 	// DEBUG
-	util.PrintPrettyJson(mashalledJson)
+	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }

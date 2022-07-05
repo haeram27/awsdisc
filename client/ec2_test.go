@@ -5,5 +5,9 @@ import (
 )
 
 func TestEc2DiscoverAll(t *testing.T) {
-	EC2DescribeInstancesCmd(AwsConfig())
+	j, err := EC2DescribeInstancesCmd(AwsConfig())
+	if err != nil {
+		t.Errorf("EC2DescribeInstancesCmd() failed ")
+	}
+	t.Log(PrettyJson(j).String())
 }
