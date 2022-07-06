@@ -12,21 +12,21 @@ import (
 
 func EKSDescribeClusterCmd(cfg *aws.Config, name string) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	if name == "" {
 		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -35,13 +35,13 @@ func EKSDescribeClusterCmd(cfg *aws.Config, name string) (j []byte, err error) {
 	input.Name = &name
 	result, err := client.DescribeCluster(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon EKS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -50,21 +50,21 @@ func EKSDescribeClusterCmd(cfg *aws.Config, name string) (j []byte, err error) {
 
 func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName string) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	if clusterName == "" || nodeGroupName == "" {
 		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -74,13 +74,13 @@ func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName 
 	input.NodegroupName = &nodeGroupName
 	result, err := client.DescribeNodegroup(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon EKS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -91,13 +91,13 @@ func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName 
 func EKSGetTokenCmd(cfg aws.Config, name string) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	if name == "" {
 		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -125,15 +125,15 @@ func EKSGetTokenCmd(cfg aws.Config, name string) (j []byte, err error) {
 
 func EKSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -141,13 +141,13 @@ func EKSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 	input := &eks.ListClustersInput{}
 	result, err := client.ListClusters(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon EKS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -156,21 +156,21 @@ func EKSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 
 func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	if name == "" {
 		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -179,13 +179,13 @@ func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (j []byte, err error) {
 	input.ClusterName = &name
 	result, err := client.ListNodegroups(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon EKS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 

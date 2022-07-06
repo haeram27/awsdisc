@@ -53,7 +53,7 @@ func ReadCredentialsFromFile(path string) (CicdCreds, error) {
 
 	f, err := os.Open(`/tmp/awsuser.json`)
 	if err != nil {
-		apps.Logs.Error("can't read credential file")
+		apps.Logs.Error(err)
 		return CicdCreds{}, err
 	}
 	defer f.Close()
@@ -64,7 +64,7 @@ func ReadCredentialsFromFile(path string) (CicdCreds, error) {
 	cred := CicdCreds{}
 	err = json.Unmarshal(j, &cred)
 	if err != nil {
-		apps.Logs.Error("failed to unmarshal json: ", err.Error())
+		apps.Logs.Error(err)
 		return CicdCreds{}, err
 	}
 
@@ -74,7 +74,7 @@ func ReadCredentialsFromFile(path string) (CicdCreds, error) {
 func DefaultConfig() (aws.Config, error) {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
-		apps.Logs.Error("configuration error: ", err.Error())
+		apps.Logs.Error(err)
 		return *aws.NewConfig(), err
 	}
 
@@ -84,7 +84,7 @@ func DefaultConfig() (aws.Config, error) {
 func SharedProfileConfig(profile string) (aws.Config, error) {
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithSharedConfigProfile(profile))
 	if err != nil {
-		apps.Logs.Error("configuration error: ", err.Error())
+		apps.Logs.Error(err)
 		return *aws.NewConfig(), err
 	}
 
@@ -95,7 +95,7 @@ func StaticCredentialConfig(akid string, seckey string, token string) (aws.Confi
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(akid, seckey, token)))
 	if err != nil {
-		apps.Logs.Error("configuration error: ", err.Error())
+		apps.Logs.Error(err)
 		return *aws.NewConfig(), err
 	}
 
@@ -134,7 +134,7 @@ func AssumeRoleCustomMFAConfig(stsUserCfg *aws.Config, roleArn string, mfaSerial
 func StsAssumeRoleConfig(akId string, secKey string, roleArn string) (aws.Config, error) {
 	cfg, err := StaticCredentialConfig(akId, secKey, "")
 	if err != nil {
-		apps.Logs.Error("StaticCredentialConfig error: ", err.Error())
+		apps.Logs.Error(err)
 		return aws.Config{}, err
 	}
 
@@ -149,13 +149,13 @@ func StsAssumeRoleConfig(akId string, secKey string, roleArn string) (aws.Config
 func StsAssumeRoleConfigFromFile() aws.Config {
 	c, err := ReadCredentialsFromFile("")
 	if err != nil {
-		apps.Logs.Error("failed to get credentials from file: ", err.Error())
+		apps.Logs.Error(err)
 		return aws.Config{}
 	}
 
 	cfg, err := StsAssumeRoleConfig(c.AccessKeyId, c.SecretAccessKey, c.RoleArn)
 	if err != nil {
-		apps.Logs.Error("StsAssumeRoleConfig error: ", err.Error())
+		apps.Logs.Error(err)
 		return aws.Config{}
 	}
 

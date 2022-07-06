@@ -45,7 +45,7 @@ func DiscoverAll() ([]byte, error) {
 
 	result, err := json.Marshal(data)
 	if err != nil {
-		apps.Logs.Error("could not marshal json: ", err)
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 

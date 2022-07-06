@@ -13,20 +13,20 @@ import (
 func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	if len(name) == 0 {
 		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -35,13 +35,13 @@ func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (j []byte, err error
 	input.Clusters = name
 	result, err := client.DescribeClusters(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon ECS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -51,20 +51,20 @@ func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (j []byte, err error
 func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	if task == "" {
 		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -73,13 +73,13 @@ func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (j []byte, err e
 	input.TaskDefinition = &task
 	result, err := client.DescribeTaskDefinition(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon ECS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -88,15 +88,15 @@ func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (j []byte, err e
 
 func ECSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -104,13 +104,13 @@ func ECSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 	input := &ecs.ListClustersInput{}
 	result, err := client.ListClusters(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon ECS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -119,21 +119,21 @@ func ECSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 
 func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	if name == "" {
 		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -142,13 +142,13 @@ func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (j []byte, err e
 	input.Cluster = &name
 	result, err := client.ListContainerInstances(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon ECS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -157,15 +157,15 @@ func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (j []byte, err e
 
 func ECSListTaskDefinitionsCmd(cfg *aws.Config) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -173,13 +173,13 @@ func ECSListTaskDefinitionsCmd(cfg *aws.Config) (j []byte, err error) {
 	input := &ecs.ListTaskDefinitionsInput{}
 	result, err := client.ListTaskDefinitions(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon ECS: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 

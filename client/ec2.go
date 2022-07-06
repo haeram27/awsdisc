@@ -12,15 +12,15 @@ import (
 
 func EC2DescribeInstancesCmd(cfg *aws.Config) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("invalid aws config... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ec2.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		err := errors.New("failed to initialize aws client... ")
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -28,13 +28,13 @@ func EC2DescribeInstancesCmd(cfg *aws.Config) (j []byte, err error) {
 	input := &ec2.DescribeInstancesInput{}
 	result, err := client.DescribeInstances(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon EC2: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
