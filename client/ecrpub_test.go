@@ -1,13 +1,14 @@
 package client
 
 import (
+	awsutil "awsdisc/client/util"
 	"testing"
 )
 
 func TestEcrPubDiscoverAll(t *testing.T) {
 	j, err := ECRPubDescribeRegistryCmd(AwsConfig())
 	if err != nil {
-		t.Errorf("ECRDescribeRepositoriesCmd() failed ")
+		t.Error(err)
 	}
-	t.Log(PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(j).String())
 }

@@ -7,12 +7,12 @@ import (
 func TestStsAssumeRole(t *testing.T) {
 	c, err := ReadCredentialsFromFile("")
 	if err != nil {
-		t.Errorf("failed to get credentials from file: %s", err.Error())
+		t.Error(err)
 	}
 
 	_, err = StaticCredentialConfig(c.AccessKeyId, c.SecretAccessKey, "")
 	if err != nil {
-		t.Errorf("StaticCredentialConfig() error: %s", err.Error())
+		t.Error(err)
 	}
 
 	/*
@@ -32,6 +32,6 @@ func TestStsAssumeRole(t *testing.T) {
 func TestReadUser(t *testing.T) {
 	_, err := ReadCredentialsFromFile("")
 	if err != nil {
-		t.Errorf("ReadCredentialsFromFile() error: %s", err.Error())
+		t.Error(err)
 	}
 }

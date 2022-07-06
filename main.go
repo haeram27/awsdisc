@@ -1,7 +1,7 @@
 package main
 
 import (
-	"awsdisc/apps"
+	apps "awsdisc/apps"
 )
 
 func main() {

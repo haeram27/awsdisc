@@ -1,7 +1,7 @@
 package client
 
 import (
-	"awsdisc/apps"
+	apps "awsdisc/apps"
 	"context"
 	"encoding/json"
 	"errors"
@@ -37,9 +37,6 @@ func ECRPubDescribeRegistryCmd(cfg *aws.Config) (j []byte, err error) {
 		apps.Logs.Error("marshaling is failed:", err.Error())
 		return []byte{}, err
 	}
-
-	// DEBUG
-	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }

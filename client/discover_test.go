@@ -1,13 +1,14 @@
 package client
 
 import (
+	awsutil "awsdisc/client/util"
 	"testing"
 )
 
 func TestDiscoverAll(t *testing.T) {
 	j, err := DiscoverAll()
 	if err != nil {
-		t.Errorf("DiscoverAll() failed ")
+		t.Error(err)
 	}
-	t.Log(PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(j).String())
 }

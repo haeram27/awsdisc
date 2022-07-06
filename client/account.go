@@ -1,7 +1,7 @@
 package client
 
 import (
-	"awsdisc/apps"
+	apps "awsdisc/apps"
 	"context"
 	"encoding/json"
 	"fmt"

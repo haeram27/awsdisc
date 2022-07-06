@@ -1,7 +1,7 @@
 package client
 
 import (
-	"awsdisc/apps"
+	apps "awsdisc/apps"
 	"context"
 	"encoding/json"
 	"errors"
@@ -45,9 +45,6 @@ func EKSDescribeClusterCmd(cfg *aws.Config, name string) (j []byte, err error) {
 		return []byte{}, err
 	}
 
-	// DEBUG
-	PrintPrettyJson(mashalledJson)
-
 	return mashalledJson, nil
 }
 
@@ -86,9 +83,6 @@ func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName 
 		apps.Logs.Error("marshaling is failed:", err.Error())
 		return []byte{}, err
 	}
-
-	// DEBUG
-	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -157,9 +151,6 @@ func EKSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
 		return []byte{}, err
 	}
 
-	// DEBUG
-	PrintPrettyJson(mashalledJson)
-
 	return mashalledJson, nil
 }
 
@@ -197,9 +188,6 @@ func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (j []byte, err error) {
 		apps.Logs.Error("marshaling is failed:", err.Error())
 		return []byte{}, err
 	}
-
-	// DEBUG
-	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }

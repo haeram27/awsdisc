@@ -1,7 +1,7 @@
 package test
 
 import (
-	"awsdisc/client"
+	awsutil "awsdisc/client/util"
 	"encoding/json"
 	"fmt"
 	"testing"
@@ -21,10 +21,10 @@ func TestMakeNestedJson(t *testing.T) {
 
 	jsonData, err := json.Marshal(data)
 	if err != nil {
-		fmt.Println("could not marshal json: ", err)
+		t.Error(err)
 		return
 	}
 
 	fmt.Println(string(jsonData))
-	client.PrintPrettyJson(jsonData)
+	awsutil.PrintPrettyJson(jsonData)
 }

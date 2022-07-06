@@ -1,13 +1,14 @@
 package client
 
 import (
+	awsutil "awsdisc/client/util"
 	"testing"
 )
 
 func TestEc2DiscoverAll(t *testing.T) {
 	j, err := EC2DescribeInstancesCmd(AwsConfig())
 	if err != nil {
-		t.Errorf("EC2DescribeInstancesCmd() failed ")
+		t.Error(err)
 	}
-	t.Log(PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(j).String())
 }

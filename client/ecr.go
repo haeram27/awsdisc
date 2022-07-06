@@ -1,7 +1,8 @@
 package client
 
 import (
-	"awsdisc/apps"
+	apps "awsdisc/apps"
+	awsutil "awsdisc/client/util"
 	"context"
 	"encoding/json"
 	"errors"
@@ -13,14 +14,14 @@ import (
 func ECRDescribeRegistryCmd(cfg *aws.Config) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -28,18 +29,15 @@ func ECRDescribeRegistryCmd(cfg *aws.Config) (j []byte, err error) {
 	input := &ecr.DescribeRegistryInput{}
 	result, err := client.DescribeRegistry(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon ECR: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
-
-	// DEBUG
-	PrintPrettyJson(mashalledJson)
 
 	return mashalledJson, nil
 }
@@ -47,14 +45,14 @@ func ECRDescribeRegistryCmd(cfg *aws.Config) (j []byte, err error) {
 func ECRDescribeRepositoriesCmd(cfg *aws.Config) (j []byte, err error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
-		apps.Logs.Error(err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
@@ -62,18 +60,85 @@ func ECRDescribeRepositoriesCmd(cfg *aws.Config) (j []byte, err error) {
 	input := &ecr.DescribeRepositoriesInput{}
 	result, err := client.DescribeRepositories(awsctx, input)
 	if err != nil {
-		apps.Logs.Error("got an error retrieving information about your Amazon ECR: ", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
 	mashalledJson, err := json.Marshal(result)
 	if err != nil {
-		apps.Logs.Error("marshaling is failed:", err.Error())
+		apps.Logs.Error(err)
 		return []byte{}, err
 	}
 
-	// DEBUG
-	PrintPrettyJson(mashalledJson)
-
 	return mashalledJson, nil
+}
+
+func ECRListImagesCmd(cfg *aws.Config, repoName string) ([]byte, error) {
+	if cfg == nil || cfg.Credentials == nil {
+		err := errors.New("invalid aws config: ")
+		apps.Logs.Error(err)
+		return []byte{}, err
+	}
+
+	if repoName == "" {
+		err := errors.New("invalid repository name")
+		apps.Logs.Error(err)
+		return []byte{}, err
+	}
+
+	client := ecr.NewFromConfig(*cfg)
+	if client == nil {
+		err := errors.New("failed to initialize aws client: ")
+		apps.Logs.Error(err)
+		return []byte{}, err
+	}
+
+	awsctx := context.TODO()
+	input := &ecr.ListImagesInput{
+		RepositoryName: &repoName,
+	}
+
+	result, err := client.ListImages(awsctx, input)
+	if err != nil {
+		apps.Logs.Error(err)
+		return []byte{}, err
+	}
+
+	return json.Marshal(result)
+}
+
+func ECRListImagesAll(cfg *aws.Config) []string {
+	if cfg == nil || cfg.Credentials == nil {
+		err := errors.New("invalid aws config: ")
+		apps.Logs.Error(err)
+		return nil
+	}
+
+	jsonBlob, err := ECRDescribeRepositoriesCmd(cfg)
+	if err != nil {
+		return nil
+	}
+
+	names, err := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
+	if err != nil {
+		apps.Logs.Error(err)
+		return nil
+	}
+
+	repos := []interface{}{}
+	switch names.(type) {
+	case []interface{}:
+		repos = names.([]interface{})
+	case interface{}:
+		repos = append(repos, names)
+	default:
+		return nil
+	}
+
+	for _, info := range repos {
+		apps.Logs.Debug("============================== repository name: ", info.(string))
+		ECRListImagesCmd(cfg, info.(string))
+	}
+
+	return nil
 }
