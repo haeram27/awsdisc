@@ -24,10 +24,6 @@ func PrettyJson(jsonBlob []byte) *bytes.Buffer {
 	return &prettyJSON
 }
 
-func PrettyMarshalJson(v interface{}) ([]byte, error) {
-	return json.MarshalIndent(v, "", "  ")
-}
-
 func JsonPath(jsonBlob []byte, path string) (any, error) {
 	jsonStrt := interface{}(nil)
 	err := json.Unmarshal(jsonBlob, &jsonStrt)

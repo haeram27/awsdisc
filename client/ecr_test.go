@@ -2,40 +2,69 @@ package client
 
 import (
 	awsutil "awsdisc/client/util"
+	"encoding/json"
 	"testing"
 )
 
 func TestEcrDiscoverAll(t *testing.T) {
-	j, err := ECRDescribeRegistryCmd(AwsConfig())
+	var jsonBlob []byte
+	var result interface{}
+
+	result, err := ECRDescribeRegistryCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECRDescribeRepositoriesCmd(AwsConfig())
+	result, err = ECRDescribeRepositoriesCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
-
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 }
 
 func TestECRDescribeRegistryCmd(t *testing.T) {
-	j, err := ECRDescribeRegistryCmd(AwsConfig())
+	var jsonBlob []byte
+	var result interface{}
+
+	result, err := ECRDescribeRegistryCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 }
 
 func TestECRDescribeRepositoriesCmd(t *testing.T) {
-	j, err := ECRDescribeRepositoriesCmd(AwsConfig())
+	var jsonBlob []byte
+	var result interface{}
+
+	result, err := ECRDescribeRepositoriesCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	repos, err := awsutil.JsonPath(j, "$.Repositories[:].RepositoryName")
+	repos, err := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
 	if err != nil {
 		t.Error(err)
 	}

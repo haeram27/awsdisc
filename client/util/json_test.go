@@ -44,7 +44,7 @@ func TestPrettyMarshalJson(t *testing.T) {
 		Type: "developer",
 	}
 
-	jsonBlob, err := PrettyMarshalJson(jsonStrt)
+	jsonBlob, err := json.MarshalIndent(jsonStrt, "", "  ")
 	if err != nil {
 		t.Error(err)
 	}

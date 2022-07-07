@@ -2,98 +2,180 @@ package client
 
 import (
 	awsutil "awsdisc/client/util"
+	"encoding/json"
 	"testing"
 )
 
 func TestEcsDiscoverAll(t *testing.T) {
-	j, err := ECSListClustersCmd(AwsConfig())
-	if err != nil {
-		t.Error(err)
-	}
-	t.Log(awsutil.PrettyJson(j).String())
+	var jsonBlob []byte
+	var result interface{}
 
-	j, err = ECSDescribeClustersCmd(AwsConfig(), []string{"cicd-ecs-ec2-cluster", "swh-ecs-cluster-ssh", "cicd-ecs-cluster"})
+	result, err := ECSListClustersCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-ec2-cluster")
+	result, err = ECSDescribeClustersCmd(AwsConfig(), []string{"cicd-ecs-ec2-cluster", "swh-ecs-cluster-ssh", "cicd-ecs-cluster"})
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSListContainerInstancesCmd(AwsConfig(), "swh-ecs-cluster-ssh")
+	result, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-ec2-cluster")
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-cluster")
+	result, err = ECSListContainerInstancesCmd(AwsConfig(), "swh-ecs-cluster-ssh")
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSListTaskDefinitionsCmd(AwsConfig())
+	result, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-cluster")
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "cicd-task-nginx:1")
+	result, err = ECSListTaskDefinitionsCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "cicd-task-ubuntu_nginx:2")
+	result, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "cicd-task-nginx:1")
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "sw-task:4")
+	result, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "cicd-task-ubuntu_nginx:2")
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
+
+	result, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "sw-task:4")
+	if err != nil {
+		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 }
 
 func TestECSListClusters(t *testing.T) {
-	j, err := ECSListClustersCmd(AwsConfig())
+	var jsonBlob []byte
+	var result interface{}
+
+	result, err := ECSListClustersCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
-
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 }
 
 func TestECSDescribeClusters(t *testing.T) {
-	j, err := ECSDescribeClustersCmd(AwsConfig(), []string{"cicd-ecs-ec2-cluster", "swh-ecs-cluster-ssh", "cicd-ecs-cluster"})
+	var jsonBlob []byte
+	var result interface{}
+
+	result, err := ECSDescribeClustersCmd(AwsConfig(), []string{"cicd-ecs-ec2-cluster", "swh-ecs-cluster-ssh", "cicd-ecs-cluster"})
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 }
 
 func TestECSListContainerInstances(t *testing.T) {
-	j, err := ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-ec2-cluster")
-	if err != nil {
-		t.Error(err)
-	}
-	t.Log(awsutil.PrettyJson(j).String())
+	var jsonBlob []byte
+	var result interface{}
 
-	j, err = ECSListContainerInstancesCmd(AwsConfig(), "swh-ecs-cluster-ssh")
+	result, err := ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-ec2-cluster")
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	j, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-cluster")
+	result, err = ECSListContainerInstancesCmd(AwsConfig(), "swh-ecs-cluster-ssh")
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
+
+	result, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-cluster")
+	if err != nil {
+		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 }

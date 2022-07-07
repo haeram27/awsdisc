@@ -4,7 +4,6 @@ import (
 	apps "awsdisc/apps"
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -15,7 +14,7 @@ import (
 	"sigs.k8s.io/aws-iam-authenticator/pkg/token"
 )
 
-func EKSDescribeClusterSTCmd(cfg *aws.Config, name string) (*eks.DescribeClusterOutput, error) {
+func EKSDescribeClusterCmd(cfg *aws.Config, name string) (*eks.DescribeClusterOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config... ")
 		apps.Logs.Error(err)
@@ -41,156 +40,79 @@ func EKSDescribeClusterSTCmd(cfg *aws.Config, name string) (*eks.DescribeCluster
 	return client.DescribeCluster(awsctx, input)
 }
 
-func EKSDescribeClusterCmd(cfg *aws.Config, name string) (j []byte, err error) {
+func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName string) (*eks.DescribeNodegroupOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	if name == "" {
-		err := errors.New("invalid arguments: empty name")
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	client := eks.NewFromConfig(*cfg)
-	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	awsctx := context.TODO()
-	input := &eks.DescribeClusterInput{}
-	input.Name = &name
-	result, err := client.DescribeCluster(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
-}
-
-func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName string) (j []byte, err error) {
-	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
-		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	if clusterName == "" || nodeGroupName == "" {
 		err := errors.New("invalid arguments: empty name")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &eks.DescribeNodegroupInput{}
 	input.ClusterName = &clusterName
 	input.NodegroupName = &nodeGroupName
-	result, err := client.DescribeNodegroup(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.DescribeNodegroup(awsctx, input)
 }
 
-func EKSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
+func EKSListClustersCmd(cfg *aws.Config) (*eks.ListClustersOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &eks.ListClustersInput{}
-	result, err := client.ListClusters(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.ListClusters(awsctx, input)
 }
 
-func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (j []byte, err error) {
+func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (*eks.ListNodegroupsOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	if name == "" {
 		err := errors.New("invalid arguments: empty name")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &eks.ListNodegroupsInput{}
 	input.ClusterName = &name
-	result, err := client.ListNodegroups(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.ListNodegroups(awsctx, input)
 }
 
-/*
-  Resolve k8s config for k8s sdk from eks cluster information
-*/
-func EKSK8sClientset(cluster *types.Cluster) (*kubernetes.Clientset, error) {
+func EKSK8sConfig(cluster *types.Cluster) (*rest.Config, error) {
 	gen, err := token.NewGenerator(true, false)
 	if err != nil {
 		apps.Logs.Error(err)
@@ -221,7 +143,20 @@ func EKSK8sClientset(cluster *types.Cluster) (*kubernetes.Clientset, error) {
 		},
 	}
 
-	k8sclientset, err := kubernetes.NewForConfig(&k8sConfig)
+	return &k8sConfig, nil
+}
+
+/*
+  Resolve k8s config for k8s sdk from eks cluster information
+*/
+func EKSK8sClientset(cluster *types.Cluster) (*kubernetes.Clientset, error) {
+	cfg, err := EKSK8sConfig(cluster)
+	if err != nil {
+		apps.Logs.Error(err)
+		return nil, err
+	}
+
+	k8sclientset, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
 		apps.Logs.Error(err)
 		return nil, err

@@ -2,13 +2,22 @@ package client
 
 import (
 	awsutil "awsdisc/client/util"
+	"encoding/json"
 	"testing"
 )
 
 func TestEcrPubDiscoverAll(t *testing.T) {
-	j, err := ECRPubDescribeRegistryCmd(AwsConfig())
+	var jsonBlob []byte
+	var result interface{}
+
+	result, err := ECRPubDescribeRegistryCmd(AwsConfig())
 	if err != nil {
 		t.Error(err)
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			t.Error(err)
+		}
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(awsutil.PrettyJson(jsonBlob).String())
 }

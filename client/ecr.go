@@ -11,86 +11,62 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
 )
 
-func ECRDescribeRegistryCmd(cfg *aws.Config) (j []byte, err error) {
+func ECRDescribeRegistryCmd(cfg *aws.Config) (*ecr.DescribeRegistryOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &ecr.DescribeRegistryInput{}
-	result, err := client.DescribeRegistry(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.DescribeRegistry(awsctx, input)
 }
 
-func ECRDescribeRepositoriesCmd(cfg *aws.Config) (j []byte, err error) {
+func ECRDescribeRepositoriesCmd(cfg *aws.Config) (*ecr.DescribeRepositoriesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &ecr.DescribeRepositoriesInput{}
-	result, err := client.DescribeRepositories(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.DescribeRepositories(awsctx, input)
 }
 
-func ECRListImagesCmd(cfg *aws.Config, repoName string) ([]byte, error) {
+func ECRListImagesCmd(cfg *aws.Config, repoName string) (*ecr.ListImagesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	if repoName == "" {
 		err := errors.New("invalid repository name")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
@@ -98,13 +74,7 @@ func ECRListImagesCmd(cfg *aws.Config, repoName string) ([]byte, error) {
 		RepositoryName: &repoName,
 	}
 
-	result, err := client.ListImages(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return json.Marshal(result)
+	return client.ListImages(awsctx, input)
 }
 
 func ECRListImagesAll(cfg *aws.Config) []string {
@@ -114,9 +84,17 @@ func ECRListImagesAll(cfg *aws.Config) []string {
 		return nil
 	}
 
-	jsonBlob, err := ECRDescribeRepositoriesCmd(cfg)
+	var jsonBlob []byte
+	result, err := ECRDescribeRepositoriesCmd(cfg)
 	if err != nil {
+		apps.Logs.Error(err)
 		return nil
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			apps.Logs.Error(err)
+			return nil
+		}
 	}
 
 	names, err := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")

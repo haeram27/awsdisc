@@ -3,185 +3,124 @@ package client
 import (
 	apps "awsdisc/apps"
 	"context"
-	"encoding/json"
 	"errors"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 )
 
-func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (j []byte, err error) {
+func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (*ecs.DescribeClustersOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	if len(name) == 0 {
 		err := errors.New("invalid arguments: empty name")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &ecs.DescribeClustersInput{}
 	input.Clusters = name
-	result, err := client.DescribeClusters(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.DescribeClusters(awsctx, input)
 }
 
-func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (j []byte, err error) {
+func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (*ecs.DescribeTaskDefinitionOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	if task == "" {
 		err := errors.New("invalid arguments: empty name")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client: ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &ecs.DescribeTaskDefinitionInput{}
 	input.TaskDefinition = &task
-	result, err := client.DescribeTaskDefinition(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.DescribeTaskDefinition(awsctx, input)
 }
 
-func ECSListClustersCmd(cfg *aws.Config) (j []byte, err error) {
+func ECSListClustersCmd(cfg *aws.Config) (*ecs.ListClustersOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &ecs.ListClustersInput{}
-	result, err := client.ListClusters(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.ListClusters(awsctx, input)
 }
 
-func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (j []byte, err error) {
+func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (*ecs.ListContainerInstancesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	if name == "" {
 		err := errors.New("invalid arguments: empty name")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &ecs.ListContainerInstancesInput{}
 	input.Cluster = &name
-	result, err := client.ListContainerInstances(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.ListContainerInstances(awsctx, input)
 }
 
-func ECSListTaskDefinitionsCmd(cfg *aws.Config) (j []byte, err error) {
+func ECSListTaskDefinitionsCmd(cfg *aws.Config) (*ecs.ListTaskDefinitionsOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
 		err := errors.New("failed to initialize aws client... ")
 		apps.Logs.Error(err)
-		return []byte{}, err
+		return nil, err
 	}
 
 	awsctx := context.TODO()
 	input := &ecs.ListTaskDefinitionsInput{}
-	result, err := client.ListTaskDefinitions(awsctx, input)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	mashalledJson, err := json.Marshal(result)
-	if err != nil {
-		apps.Logs.Error(err)
-		return []byte{}, err
-	}
-
-	return mashalledJson, nil
+	return client.ListTaskDefinitions(awsctx, input)
 }
