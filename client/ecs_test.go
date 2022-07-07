@@ -60,3 +60,40 @@ func TestEcsDiscoverAll(t *testing.T) {
 	}
 	t.Log(awsutil.PrettyJson(j).String())
 }
+
+func TestECSListClusters(t *testing.T) {
+	j, err := ECSListClustersCmd(AwsConfig())
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(awsutil.PrettyJson(j).String())
+
+}
+
+func TestECSDescribeClusters(t *testing.T) {
+	j, err := ECSDescribeClustersCmd(AwsConfig(), []string{"cicd-ecs-ec2-cluster", "swh-ecs-cluster-ssh", "cicd-ecs-cluster"})
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(awsutil.PrettyJson(j).String())
+}
+
+func TestECSListContainerInstances(t *testing.T) {
+	j, err := ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-ec2-cluster")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(awsutil.PrettyJson(j).String())
+
+	j, err = ECSListContainerInstancesCmd(AwsConfig(), "swh-ecs-cluster-ssh")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(awsutil.PrettyJson(j).String())
+
+	j, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-cluster")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(awsutil.PrettyJson(j).String())
+}

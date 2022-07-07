@@ -32,3 +32,11 @@ func TestEksDiscoveryAll(t *testing.T) {
 		t.Log(awsutil.PrettyJson(j).String())
 	*/
 }
+
+func TestEksConfig(t *testing.T) {
+	result, err := EKSDescribeClusterSTCmd(AwsConfig(), "eks-cicd-sec-test-ec2-ssh")
+	if err != nil {
+		t.Error(err)
+	}
+	EKSK8sClientset(result.Cluster)
+}

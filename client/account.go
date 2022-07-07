@@ -59,7 +59,11 @@ func ReadCredentialsFromFile(path string) (CicdCreds, error) {
 	defer f.Close()
 
 	fmt.Println("Successfully Opened users.json")
-	j, _ := ioutil.ReadAll(f)
+	j, err := ioutil.ReadAll(f)
+	if err != nil {
+		apps.Logs.Error(err)
+		return CicdCreds{}, err
+	}
 
 	cred := CicdCreds{}
 	err = json.Unmarshal(j, &cred)
