@@ -25,5 +25,6 @@ func EC2DescribeInstancesCmd(cfg *aws.Config) (*ec2.DescribeInstancesOutput, err
 
 	awsctx := context.TODO()
 	input := &ec2.DescribeInstancesInput{}
+
 	return client.DescribeInstances(awsctx, input)
 }

@@ -77,46 +77,58 @@ func ECRListImagesCmd(cfg *aws.Config, repoName string) (*ecr.ListImagesOutput, 
 	return client.ListImages(awsctx, input)
 }
 
-func ECRListImagesAll(cfg *aws.Config) []string {
+type EcrImage struct {
+	repoUri *string
+	tag     *string
+	digest  *string
+}
+
+type EcrImageUri interface {
+	TagUri() string
+	DigestUri() string
+}
+
+func (img EcrImage) TagUri() string {
+	return *img.repoUri + ":" + *img.tag
+}
+
+func (img EcrImage) DigestUri() string {
+	return *img.repoUri + "@" + *img.digest
+}
+
+func ECRListImagesAll(cfg *aws.Config) []EcrImage {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)
 		return nil
 	}
 
-	var jsonBlob []byte
-	result, err := ECRDescribeRepositoriesCmd(cfg)
+	reposOut, err := ECRDescribeRepositoriesCmd(cfg)
 	if err != nil {
 		apps.Logs.Error(err)
 		return nil
 	} else {
-		jsonBlob, err = json.Marshal(result)
+		jsonBlob, err := json.Marshal(reposOut)
 		if err != nil {
 			apps.Logs.Error(err)
 			return nil
 		}
+
+		awsutil.PrintPrettyJson(jsonBlob)
 	}
 
-	names, err := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
-	if err != nil {
-		apps.Logs.Error(err)
-		return nil
+	var images []EcrImage
+	for _, repo := range reposOut.Repositories {
+		imgOut, err := ECRListImagesCmd(cfg, *repo.RepositoryName)
+		if err != nil {
+			apps.Logs.Error(err)
+			continue
+		}
+
+		for _, img := range imgOut.ImageIds {
+			images = append(images, EcrImage{repo.RepositoryUri, img.ImageTag, img.ImageDigest})
+		}
 	}
 
-	repos := []interface{}{}
-	switch names.(type) {
-	case []interface{}:
-		repos = names.([]interface{})
-	case interface{}:
-		repos = append(repos, names)
-	default:
-		return nil
-	}
-
-	for _, info := range repos {
-		apps.Logs.Debug("============================== repository name: ", info.(string))
-		ECRListImagesCmd(cfg, info.(string))
-	}
-
-	return nil
+	return images
 }
