@@ -100,18 +100,18 @@ func ECRListImagesAll(cfg *aws.Config) []EcrImage {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)
-		return nil
+		return []EcrImage{}
 	}
 
 	reposOut, err := ECRDescribeRepositoriesCmd(cfg)
 	if err != nil {
 		apps.Logs.Error(err)
-		return nil
+		return []EcrImage{}
 	} else {
 		jsonBlob, err := json.Marshal(reposOut)
 		if err != nil {
 			apps.Logs.Error(err)
-			return nil
+			return []EcrImage{}
 		}
 
 		awsutil.PrintPrettyJson(jsonBlob)
@@ -131,4 +131,35 @@ func ECRListImagesAll(cfg *aws.Config) []EcrImage {
 	}
 
 	return images
+}
+
+func ECRGetAuthorizationTokenCmd(cfg *aws.Config) (string, error) {
+	if cfg == nil || cfg.Credentials == nil {
+		err := errors.New("invalid aws config: ")
+		apps.Logs.Error(err)
+		return "", err
+	}
+
+	client := ecr.NewFromConfig(*cfg)
+	if client == nil {
+		err := errors.New("failed to initialize aws client: ")
+		apps.Logs.Error(err)
+		return "", err
+	}
+
+	awsctx := context.TODO()
+	input := &ecr.GetAuthorizationTokenInput{}
+
+	out, err := client.GetAuthorizationToken(awsctx, input)
+	if err != nil {
+		err := errors.New("failed to initialize aws client: ")
+		apps.Logs.Error(err)
+		return "", err
+	}
+
+	if out.AuthorizationData != nil && len(out.AuthorizationData) > 0 {
+		return *out.AuthorizationData[0].AuthorizationToken, nil
+	}
+
+	return "", nil
 }

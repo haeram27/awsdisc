@@ -72,5 +72,17 @@ func TestECRDescribeRepositoriesCmd(t *testing.T) {
 }
 
 func TestECRListImagesAll(t *testing.T) {
-	ECRListImagesAll(AwsConfig())
+	images := ECRListImagesAll(AwsConfig())
+
+	for _, image := range images {
+		t.Log(EcrImageUri(image).DigestUri())
+	}
+}
+
+func TestECRGetAuthorizationTokenCmd(t *testing.T) {
+	tok, err := ECRGetAuthorizationTokenCmd(AwsConfig())
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(tok)
 }

@@ -20,4 +20,4 @@ func TestDiscoverK8S(t *testing.T) {
 	t.Log(string(GetServiceAccountJson()))
 	t.Log(string(GetNodesJson()))
 	t.Log(string(GetPodsJson()))
-} // end of switch
+}
