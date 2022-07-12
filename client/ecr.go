@@ -133,6 +133,25 @@ func ECRListImagesAll(cfg *aws.Config) []EcrImage {
 	return images
 }
 
+/*
+	ecr.GetAuthorizationToken API return token(base64 encoded string)
+	that has format as <USERNAME>:<PASSWORD> when it decoded.
+	<USERNAME> is "AWS" so far and <PASSWORD> is token encoded string.
+	For the use of returned token, token SHOULD be base64 decoded and distinguished with <USERNAME> and <PASSWORD>.
+
+	// EXAMPLE
+	data, err := base64.URLEncoding.DecodeString(awsEcrAuthTok)
+	if err != nil {
+		apps.Logs.Error(err)
+	}
+
+	parts := strings.SplitN(string(data), ":", 2)
+
+	auth := types.AuthConfig{
+		Username: parts[0],
+		Password: parts[1],
+	}
+*/
 func ECRGetAuthorizationTokenCmd(cfg *aws.Config) (string, error) {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
