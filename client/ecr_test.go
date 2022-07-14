@@ -64,15 +64,16 @@ func TestECRDescribeRepositoriesCmd(t *testing.T) {
 	}
 	t.Log(awsutil.PrettyJson(jsonBlob).String())
 
-	repos, err := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
-	if err != nil {
-		t.Error(err)
-	}
+	repos := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
 	t.Logf("%v", repos)
 }
 
 func TestECRListImagesAll(t *testing.T) {
-	images := ECRListImagesAll(AwsConfig())
+	ECRListImagesAll(AwsConfig())
+}
+
+func TestECRListImagesAllST(t *testing.T) {
+	images := ECRListImagesAllST(AwsConfig())
 
 	for _, image := range images {
 		t.Log(EcrImageUri(image).DigestUri())

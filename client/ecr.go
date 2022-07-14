@@ -77,6 +77,36 @@ func ECRListImagesCmd(cfg *aws.Config, repoName string) (*ecr.ListImagesOutput, 
 	return client.ListImages(awsctx, input)
 }
 
+func ECRListImagesAll(cfg *aws.Config) []string {
+	if cfg == nil || cfg.Credentials == nil {
+		err := errors.New("invalid aws config: ")
+		apps.Logs.Error(err)
+		return nil
+	}
+
+	var jsonBlob []byte
+	result, err := ECRDescribeRepositoriesCmd(cfg)
+	if err != nil {
+		apps.Logs.Error(err)
+		return nil
+	} else {
+		jsonBlob, err = json.Marshal(result)
+		if err != nil {
+			apps.Logs.Error(err)
+			return nil
+		}
+	}
+
+	names := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
+
+	for _, info := range names {
+		apps.Logs.Debug("============================== repository name: ", info.(string))
+		ECRListImagesCmd(cfg, info.(string))
+	}
+
+	return nil
+}
+
 type EcrImage struct {
 	repoUri *string
 	tag     *string
@@ -96,7 +126,7 @@ func (img EcrImage) DigestUri() string {
 	return *img.repoUri + "@" + *img.digest
 }
 
-func ECRListImagesAll(cfg *aws.Config) []EcrImage {
+func ECRListImagesAllST(cfg *aws.Config) []EcrImage {
 	if cfg == nil || cfg.Credentials == nil {
 		err := errors.New("invalid aws config: ")
 		apps.Logs.Error(err)

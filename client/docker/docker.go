@@ -46,16 +46,18 @@ func Login(url string, awsEcrAuthTok string) {
 	fmt.Printf("================== %+v", body)
 }
 
-func PullImage(uri string, awsEcrAuthTok string) {
+func PullImage(uri string, awsEcrAuthTok string) error {
 	ctx := context.Background()
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		apps.Logs.Error(err)
+		return err
 	}
 
 	data, err := base64.URLEncoding.DecodeString(awsEcrAuthTok)
 	if err != nil {
 		apps.Logs.Error(err)
+		return err
 	}
 
 	parts := strings.SplitN(string(data), ":", 2)
@@ -70,8 +72,11 @@ func PullImage(uri string, awsEcrAuthTok string) {
 	reader, err := cli.ImagePull(ctx, uri, types.ImagePullOptions{RegistryAuth: authBase64})
 	if err != nil {
 		apps.Logs.Error(err)
+		return err
 	}
 
 	defer reader.Close()
 	io.Copy(os.Stdout, reader)
+
+	return nil
 }

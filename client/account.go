@@ -21,11 +21,12 @@ var awscfg aws.Config
 var onceAwsCfg sync.Once
 
 type CicdCreds struct {
-	AccessKeyId     string `json:"AccessKeyId"`
-	SecretAccessKey string `json:"SecretAccessKey"`
+	AccessKeyId     string `json:"AccessKeyId,omitempty"`     // mandatory
+	SecretAccessKey string `json:"SecretAccessKey,omitempty"` // mandatory
 	SessionToken    string `json:"SessionToken,omitempty"`
 	Expiration      string `json:"Expiration,omitempty"`
-	RoleArn         string `json:"RoleArn,omitempty"`
+	Region          string `json:"Region,omitempty"`  // mandatory
+	RoleArn         string `json:"RoleArn,omitempty"` // mandatory
 }
 
 func AwsConfig() *aws.Config {
@@ -135,14 +136,15 @@ func AssumeRoleCustomMFAConfig(stsUserCfg *aws.Config, roleArn string, mfaSerial
 	secKey : user's Secret Access Key
 	roleArn : arn of role
 */
-func StsAssumeRoleConfig(akId string, secKey string, roleArn string) (aws.Config, error) {
-	cfg, err := StaticCredentialConfig(akId, secKey, "")
+func StsAssumeRoleConfig(c *CicdCreds) (aws.Config, error) {
+	cfg, err := StaticCredentialConfig(c.AccessKeyId, c.SecretAccessKey, "")
 	if err != nil {
 		apps.Logs.Error(err)
 		return aws.Config{}, err
 	}
 
-	AssumeRoleConfig(&cfg, roleArn)
+	cfg.Region = c.Region
+	AssumeRoleConfig(&cfg, c.RoleArn)
 
 	return cfg, nil
 }
@@ -157,7 +159,7 @@ func StsAssumeRoleConfigFromFile() aws.Config {
 		return aws.Config{}
 	}
 
-	cfg, err := StsAssumeRoleConfig(c.AccessKeyId, c.SecretAccessKey, c.RoleArn)
+	cfg, err := StsAssumeRoleConfig(&c)
 	if err != nil {
 		apps.Logs.Error(err)
 		return aws.Config{}
