@@ -11,14 +11,14 @@ import (
 
 func ECRPubDescribeRegistryCmd(cfg *aws.Config) (*ecrpublic.DescribeRegistriesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := ecrpublic.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}

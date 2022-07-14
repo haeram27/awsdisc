@@ -11,14 +11,14 @@ import (
 
 func EC2DescribeInstancesCmd(cfg *aws.Config) (*ec2.DescribeInstancesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := ec2.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}

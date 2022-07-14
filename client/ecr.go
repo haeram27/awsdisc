@@ -13,14 +13,14 @@ import (
 
 func ECRDescribeRegistryCmd(cfg *aws.Config) (*ecr.DescribeRegistryOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -32,14 +32,14 @@ func ECRDescribeRegistryCmd(cfg *aws.Config) (*ecr.DescribeRegistryOutput, error
 
 func ECRDescribeRepositoriesCmd(cfg *aws.Config) (*ecr.DescribeRepositoriesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func ECRDescribeRepositoriesCmd(cfg *aws.Config) (*ecr.DescribeRepositoriesOutpu
 
 func ECRListImagesCmd(cfg *aws.Config, repoName string) (*ecr.ListImagesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func ECRListImagesCmd(cfg *aws.Config, repoName string) (*ecr.ListImagesOutput, 
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func ECRListImagesCmd(cfg *aws.Config, repoName string) (*ecr.ListImagesOutput, 
 
 func ECRListImagesAll(cfg *aws.Config) []string {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil
 	}
@@ -128,7 +128,7 @@ func (img EcrImage) DigestUri() string {
 
 func ECRListImagesAllST(cfg *aws.Config) []EcrImage {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return []EcrImage{}
 	}
@@ -184,14 +184,14 @@ func ECRListImagesAllST(cfg *aws.Config) []EcrImage {
 */
 func ECRGetAuthorizationTokenCmd(cfg *aws.Config) (string, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return "", err
 	}
 
 	client := ecr.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return "", err
 	}
@@ -201,7 +201,7 @@ func ECRGetAuthorizationTokenCmd(cfg *aws.Config) (string, error) {
 
 	out, err := client.GetAuthorizationToken(awsctx, input)
 	if err != nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return "", err
 	}

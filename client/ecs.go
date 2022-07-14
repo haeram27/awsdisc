@@ -11,7 +11,7 @@ import (
 
 func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (*ecs.DescribeClustersOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (*ecs.DescribeCluste
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func ECSDescribeClustersCmd(cfg *aws.Config, name []string) (*ecs.DescribeCluste
 
 func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (*ecs.DescribeTaskDefinitionOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (*ecs.DescribeTa
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -63,14 +63,14 @@ func ECSDescribeTaskDefinitionCmd(cfg *aws.Config, task string) (*ecs.DescribeTa
 
 func ECSListClustersCmd(cfg *aws.Config) (*ecs.ListClustersOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func ECSListClustersCmd(cfg *aws.Config) (*ecs.ListClustersOutput, error) {
 
 func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (*ecs.ListContainerInstancesOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (*ecs.ListContai
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -108,14 +108,14 @@ func ECSListContainerInstancesCmd(cfg *aws.Config, name string) (*ecs.ListContai
 
 func ECSListTaskDefinitionsCmd(cfg *aws.Config) (*ecs.ListTaskDefinitionsOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := ecs.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}

@@ -16,7 +16,7 @@ import (
 
 func EKSDescribeClusterCmd(cfg *aws.Config, name string) (*eks.DescribeClusterOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func EKSDescribeClusterCmd(cfg *aws.Config, name string) (*eks.DescribeClusterOu
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func EKSDescribeClusterCmd(cfg *aws.Config, name string) (*eks.DescribeClusterOu
 
 func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName string) (*eks.DescribeNodegroupOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName 
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -69,14 +69,14 @@ func EKSDescribeNodeGroupCmd(cfg *aws.Config, clusterName string, nodeGroupName 
 
 func EKSListClustersCmd(cfg *aws.Config) (*eks.ListClustersOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func EKSListClustersCmd(cfg *aws.Config) (*eks.ListClustersOutput, error) {
 
 func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (*eks.ListNodegroupsOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config... ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func EKSListNodeGroupsCmd(cfg *aws.Config, name string) (*eks.ListNodegroupsOutp
 
 	client := eks.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client... ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}

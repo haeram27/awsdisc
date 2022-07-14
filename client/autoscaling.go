@@ -11,14 +11,14 @@ import (
 
 func ASCLDescribeAutoScalingGroupsCmd(cfg *aws.Config) (*ascl.DescribeAutoScalingGroupsOutput, error) {
 	if cfg == nil || cfg.Credentials == nil {
-		err := errors.New("invalid aws config: ")
+		err := errors.New("invalid aws config")
 		apps.Logs.Error(err)
 		return nil, err
 	}
 
 	client := ascl.NewFromConfig(*cfg)
 	if client == nil {
-		err := errors.New("failed to initialize aws client: ")
+		err := errors.New("failed to initialize aws client")
 		apps.Logs.Error(err)
 		return nil, err
 	}
