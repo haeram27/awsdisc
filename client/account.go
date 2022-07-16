@@ -40,11 +40,12 @@ func AwsConfig() *aws.Config {
 /*
 /tmp/awsuser.json:
 {
-	"AccessKeyId": "access_key_id",
-	"SecretAccessKey": "secret_access_key",
+	"AccessKeyId": "access_key_id",          // mandatory
+	"SecretAccessKey": "secret_access_key",  // mandatory
 	"SessionToken": "session_token",
 	"Expiration": "expiration",
-	"RoleArn": "role_arn"
+	"Region": "region",                      // mandatory
+	"RoleArn": "role_arn"                    // mandatory
 }
 */
 func ReadCredentialsFromFile(path string) (CicdCreds, error) {
