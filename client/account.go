@@ -155,7 +155,7 @@ func StsAssumeRoleConfig(c *CicdCreds) (*aws.Config, error) {
 	cfg.Region = c.Region
 
 	if c.RoleArn == "" {
-		apps.Logs.Info("no role information in credential file")
+		// apps.Logs.Info("no role information in credential file")
 	} else {
 		AssumeRoleConfig(&cfg, c.RoleArn)
 	}
