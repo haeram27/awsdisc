@@ -7,6 +7,7 @@ func RemoveFromSlice[T comparable](l []T, v T) []T {
 			l = append(l[:i], l[i+1:]...)
 		}
 	}
+
 	return l
 }
 
@@ -23,5 +24,6 @@ func DiffStrSlice(a, b []string) []string {
 			diff = append(diff, v)
 		}
 	}
+
 	return diff
 }

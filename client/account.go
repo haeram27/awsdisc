@@ -26,7 +26,7 @@ type CicdCreds struct {
 	SessionToken    string `json:"SessionToken,omitempty"`
 	Expiration      string `json:"Expiration,omitempty"`
 	Region          string `json:"Region,omitempty"`  // mandatory
-	RoleArn         string `json:"RoleArn,omitempty"` // mandatory
+	RoleArn         string `json:"RoleArn,omitempty"`
 }
 
 func AwsConfig() *aws.Config {
@@ -45,7 +45,7 @@ func AwsConfig() *aws.Config {
 	"SessionToken": "session_token",
 	"Expiration": "expiration",
 	"Region": "region",                      // mandatory
-	"RoleArn": "role_arn"                    // mandatory
+	"RoleArn": "role_arn"
 }
 */
 func ReadCredentialsFromFile(path string) (CicdCreds, error) {
@@ -145,7 +145,12 @@ func StsAssumeRoleConfig(c *CicdCreds) (aws.Config, error) {
 	}
 
 	cfg.Region = c.Region
-	AssumeRoleConfig(&cfg, c.RoleArn)
+
+	if c.RoleArn == "" {
+		apps.Logs.Warn("no role information in credential file")
+	} else {
+		AssumeRoleConfig(&cfg, c.RoleArn)
+	}
 
 	return cfg, nil
 }

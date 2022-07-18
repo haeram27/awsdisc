@@ -49,9 +49,11 @@ func EC2CreateSnapshotsCmd(cfg *aws.Config, instanceId string) (*ec2.CreateSnaps
 	}
 
 	awsctx := context.TODO()
+	description := "cicd-sec"
 	tagKey := "instanceId"
 	input := &ec2.CreateSnapshotsInput{
 		InstanceSpecification: &ispc,
+		Description:           &description,
 		TagSpecifications:     []types.TagSpecification{{ResourceType: "snapshot", Tags: []types.Tag{{Key: &tagKey, Value: &instanceId}}}},
 	}
 
