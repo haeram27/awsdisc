@@ -1,7 +1,7 @@
 package client
 
 import (
-	awsutil "awsdisc/client/util"
+	"awsdisc/apps/util"
 	"encoding/json"
 	"testing"
 )
@@ -19,5 +19,5 @@ func TestEcrPubDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 }

@@ -1,7 +1,7 @@
 package client
 
 import (
-	awsutil "awsdisc/client/util"
+	"awsdisc/apps/util"
 	"testing"
 )
 
@@ -10,5 +10,5 @@ func TestDiscoverAll(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Log(awsutil.PrettyJson(j).String())
+	t.Log(util.PrettyJson(j).String())
 }

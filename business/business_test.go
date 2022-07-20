@@ -1,7 +1,7 @@
 package business
 
 import (
-	awsutil "awsdisc/client/util"
+	"awsdisc/apps/util"
 	"fmt"
 	"testing"
 )
@@ -91,10 +91,10 @@ func TestScanTargetExam(t *testing.T) {
 		]
 	}`
 
-	j1 := awsutil.JsonPath([]byte(t1), "$.Reservations[*].Instances[*].InstanceId")
+	j1 := util.JsonPath([]byte(t1), "$.Reservations[*].Instances[*].InstanceId")
 	t.Log(j1)
 
-	j2 := awsutil.JsonPath([]byte(t2), "$.AutoScalingGroups[*].Instances[1:].InstanceId")
+	j2 := util.JsonPath([]byte(t2), "$.AutoScalingGroups[*].Instances[1:].InstanceId")
 	t.Log(j2)
 
 	s := make([]string, len(j1))
@@ -103,7 +103,7 @@ func TestScanTargetExam(t *testing.T) {
 	}
 
 	for _, e := range j2 {
-		s = awsutil.RemoveFromSlice(s, e.(string))
+		s = util.RemoveFromSlice(s, e.(string))
 	}
 
 	t.Log(s)

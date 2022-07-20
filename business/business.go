@@ -2,8 +2,8 @@ package business
 
 import (
 	"awsdisc/apps"
+	"awsdisc/apps/util"
 	aws "awsdisc/client"
-	awsutil "awsdisc/client/util"
 	"encoding/json"
 	"fmt"
 )
@@ -33,13 +33,13 @@ func ListEc2InstancesForEBSScan() []string {
 		return []string{}
 	}
 
-	j1 := awsutil.JsonPath([]byte(instances), "$.Reservations[*].Instances[*].InstanceId")
+	j1 := util.JsonPath([]byte(instances), "$.Reservations[*].Instances[*].InstanceId")
 	if err != nil {
 		apps.Logs.Error(err)
 		return []string{}
 	}
 
-	j2 := awsutil.JsonPath([]byte(groups), "$.AutoScalingGroups[*].Instances[1:].InstanceId")
+	j2 := util.JsonPath([]byte(groups), "$.AutoScalingGroups[*].Instances[1:].InstanceId")
 	if err != nil {
 		apps.Logs.Error(err)
 		return []string{}
@@ -51,7 +51,7 @@ func ListEc2InstancesForEBSScan() []string {
 	}
 
 	for _, e := range j2 {
-		s = awsutil.RemoveFromSlice(s, e.(string))
+		s = util.RemoveFromSlice(s, e.(string))
 	}
 
 	return s

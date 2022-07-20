@@ -1,7 +1,7 @@
 package client
 
 import (
-	awsutil "awsdisc/client/util"
+	"awsdisc/apps/util"
 	"encoding/json"
 	"testing"
 )
@@ -19,7 +19,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSDescribeClustersCmd(AwsConfig(), []string{"cicd-ecs-ec2-cluster", "swh-ecs-cluster-ssh", "cicd-ecs-cluster"})
 	if err != nil {
@@ -30,7 +30,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-ec2-cluster")
 	if err != nil {
@@ -41,7 +41,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSListContainerInstancesCmd(AwsConfig(), "swh-ecs-cluster-ssh")
 	if err != nil {
@@ -52,7 +52,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-cluster")
 	if err != nil {
@@ -63,7 +63,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSListTaskDefinitionsCmd(AwsConfig())
 	if err != nil {
@@ -74,7 +74,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "cicd-task-nginx:1")
 	if err != nil {
@@ -85,7 +85,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "cicd-task-ubuntu_nginx:2")
 	if err != nil {
@@ -96,7 +96,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSDescribeTaskDefinitionCmd(AwsConfig(), "sw-task:4")
 	if err != nil {
@@ -107,7 +107,7 @@ func TestEcsDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 }
 
 func TestECSListClusters(t *testing.T) {
@@ -123,7 +123,7 @@ func TestECSListClusters(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 }
 
 func TestECSDescribeClusters(t *testing.T) {
@@ -139,7 +139,7 @@ func TestECSDescribeClusters(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 }
 
 func TestECSListContainerInstances(t *testing.T) {
@@ -155,7 +155,7 @@ func TestECSListContainerInstances(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSListContainerInstancesCmd(AwsConfig(), "swh-ecs-cluster-ssh")
 	if err != nil {
@@ -166,7 +166,7 @@ func TestECSListContainerInstances(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECSListContainerInstancesCmd(AwsConfig(), "cicd-ecs-cluster")
 	if err != nil {
@@ -177,5 +177,5 @@ func TestECSListContainerInstances(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 }

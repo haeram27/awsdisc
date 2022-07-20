@@ -1,7 +1,7 @@
 package client
 
 import (
-	awsutil "awsdisc/client/util"
+	"awsdisc/apps/util"
 	"encoding/json"
 	"testing"
 )
@@ -19,7 +19,7 @@ func TestEksDiscoveryAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = EKSDescribeClusterCmd(AwsConfig(), "eks-cicd-sec-test-ec2-ssh")
 	if err != nil {
@@ -30,7 +30,7 @@ func TestEksDiscoveryAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = EKSDescribeClusterCmd(AwsConfig(), "private-subnet-cluster")
 	if err != nil {
@@ -41,14 +41,14 @@ func TestEksDiscoveryAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	/*
 		j, err = EKSDescribeClusterCmd(AwsConfig(), "")
 		if err != nil {
 			t.Error(err)
 		}
-		t.Log(awsutil.PrettyJson(j).String())
+		t.Log(util.PrettyJson(j).String())
 	*/
 }
 

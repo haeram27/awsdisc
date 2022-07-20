@@ -1,7 +1,7 @@
 package client
 
 import (
-	awsutil "awsdisc/client/util"
+	"awsdisc/apps/util"
 	"encoding/json"
 	"testing"
 )
@@ -19,7 +19,7 @@ func TestEcrDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
 	result, err = ECRDescribeRepositoriesCmd(AwsConfig())
 	if err != nil {
@@ -30,7 +30,7 @@ func TestEcrDiscoverAll(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 }
 
 func TestECRDescribeRegistryCmd(t *testing.T) {
@@ -46,7 +46,7 @@ func TestECRDescribeRegistryCmd(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 }
 
 func TestECRDescribeRepositoriesCmd(t *testing.T) {
@@ -62,9 +62,9 @@ func TestECRDescribeRepositoriesCmd(t *testing.T) {
 			t.Error(err)
 		}
 	}
-	t.Log(awsutil.PrettyJson(jsonBlob).String())
+	t.Log(util.PrettyJson(jsonBlob).String())
 
-	repos := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
+	repos := util.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
 	t.Logf("%v", repos)
 }
 

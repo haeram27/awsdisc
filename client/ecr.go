@@ -2,7 +2,7 @@ package client
 
 import (
 	apps "awsdisc/apps"
-	awsutil "awsdisc/client/util"
+	"awsdisc/apps/util"
 	"context"
 	"encoding/json"
 	"errors"
@@ -97,7 +97,7 @@ func ECRListImagesAll(cfg *aws.Config) []string {
 		}
 	}
 
-	names := awsutil.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
+	names := util.JsonPath(jsonBlob, "$.Repositories[:].RepositoryName")
 
 	for _, info := range names {
 		apps.Logs.Debug("============================== repository name: ", info.(string))
@@ -144,7 +144,7 @@ func ECRListImagesAllST(cfg *aws.Config) []EcrImage {
 			return []EcrImage{}
 		}
 
-		awsutil.PrintPrettyJson(jsonBlob)
+		util.PrintPrettyJson(jsonBlob)
 	}
 
 	var images []EcrImage
