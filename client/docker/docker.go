@@ -46,6 +46,9 @@ func Login(url string, awsEcrAuthTok string) {
 	fmt.Printf("================== %+v", body)
 }
 
+/*
+   WARNING: authentication information SHOULD be set Options of API
+*/
 func PullImage(uri string, awsEcrAuthTok string) error {
 	ctx := context.Background()
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
