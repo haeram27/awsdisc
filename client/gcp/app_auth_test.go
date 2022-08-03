@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"testing"
 
 	"cloud.google.com/go/storage"
 	"golang.org/x/oauth2/google"
@@ -12,22 +13,23 @@ import (
 	"google.golang.org/api/option"
 )
 
-// [START auth_cloud_implicit]
-
 // implicit uses Application Default Credentials to authenticate.
-func implicit() {
+func TestImplicit(t *testing.T) {
+	projectID := "your project id"
 	ctx := context.Background()
 
 	// For API packages whose import path is starting with "cloud.google.com/go",
 	// such as cloud.google.com/go/storage in this case, if there are no credentials
 	// provided, the client library will look for credentials in the environment.
+
+	//os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", "/path/to/service-account-key.json")
 	storageClient, err := storage.NewClient(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer storageClient.Close()
 
-	it := storageClient.Buckets(ctx, "project-id")
+	it := storageClient.Buckets(ctx, projectID)
 	for {
 		bucketAttrs, err := it.Next()
 		if err == iterator.Done {
@@ -50,14 +52,13 @@ func implicit() {
 	_ = kmsService
 }
 
-// [END auth_cloud_implicit]
-
-// [START auth_cloud_explicit]
-
 // explicit reads credentials from the specified path.
-func explicit(jsonPath, projectID string) {
+func TestExplicit(t *testing.T) {
+	jsonKeyPath := "/path/to/service_account_key.json"
+	projectID := "your project id"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx, option.WithCredentialsFile(jsonPath))
+
+	client, err := storage.NewClient(ctx, option.WithCredentialsFile(jsonKeyPath))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -78,12 +79,14 @@ func explicit(jsonPath, projectID string) {
 	}
 }
 
-// [END auth_cloud_explicit]
-
-// [START auth_cloud_explicit_compute_engine]
-// [START auth_cloud_explicit_app_engine]
+// explicitDefault finds the default credentials.
+//
+// It is very uncommon to need to explicitly get the default credentials in Go.
+// Most of the time, client libraries can use Application Default Credentials
+// without having to pass the credentials in directly. See implicit above.
 
 // OAuth2 scopes used by this API.
+// Catalog of all all valid scope names at https://developers.google.com/identity/protocols/oauth2/scopes
 const (
 	// View and manage your data across Google Cloud Platform services
 	CloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
@@ -92,12 +95,8 @@ const (
 	CloudPlatformReadOnlyScope = "https://www.googleapis.com/auth/cloud-platform.read-only"
 )
 
-// explicitDefault finds the default credentials.
-//
-// It is very uncommon to need to explicitly get the default credentials in Go.
-// Most of the time, client libraries can use Application Default Credentials
-// without having to pass the credentials in directly. See implicit above.
-func explicitDefault(projectID string) {
+func TestExplicitDefault(t *testing.T) {
+	projectID := "your project id"
 	ctx := context.Background()
 
 	creds, err := google.FindDefaultCredentials(ctx, CloudPlatformReadOnlyScope)
@@ -125,6 +124,3 @@ func explicitDefault(projectID string) {
 		fmt.Println(battrs.Name)
 	}
 }
-
-// [END auth_cloud_explicit_compute_engine]
-// [END auth_cloud_explicit_app_engine]
